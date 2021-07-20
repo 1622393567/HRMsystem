@@ -31,7 +31,6 @@ public class AccountController {
 
     @RequestMapping("getSession.do")
     public void getSession(HttpServletRequest request) throws Exception {
-        String ip=request.getRemoteAddr();
         System.out.println((String)request.getSession().getAttribute("emp_id"));
     }
    /* @RequestMapping(value = "Main.do")
