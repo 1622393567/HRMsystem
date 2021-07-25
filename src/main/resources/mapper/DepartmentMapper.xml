@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.DepartmentMapper">
+    <resultMap id="departmentMap" type="cn.edu.guet.bean.Department">
+        <result property="deptId" column="dept_id"></result>
+        <result property="deptName" column="dept_name"></result>
+        <result property="deptBossId" column="dept_boss_id"></result>
+        <result property="deptInfo" column="dept_info"></result>
+        <result property="deptFoundingTime" column="dept_founding_time"></result>
+    </resultMap>
+    <select id="viewDepartment" resultMap="departmentMap">
+        select department_table.dept_id,department_table.dept_name,department_table.dept_boss_id,department_table.dept_info,department_table.dept_founding_time from department_table
+    </select>
+    <select id="viewDepartmentByKeyword" parameterType="string" resultMap="departmentMap">
+        <bind name="pattern" value="'%' + keyword + '%'"/>
+        select department_table.dept_id,department_table.dept_name,department_table.dept_boss_id,department_table.dept_info,department_table.dept_founding_time
+        from department_table
+        WHERE
+        dept_id LIKE #{pattern}
+        OR
+        dept_name LIKE #{pattern}
+        OR
+        dept_boss_id like #{pattern}
+        OR
+        dept_info like #{pattern}
+    </select>
+    <delete id="deleteDepartmentById" parameterType="string">
+        delete from department_table where dept_id=#{dept_id}
+    </delete>
+
+
+    <select id="getDepartmentById" parameterType="string" resultMap="departmentMap">
+        select department_table.dept_id,department_table.dept_name,department_table.dept_boss_id,department_table.dept_info,department_table.dept_founding_time from department_table where dept_id=#{dept_id}
+    </select>
+    <update id="editDepartment" parameterType="cn.edu.guet.bean.Department">
+        update department_table set dept_id=#{deptId},dept_name=#{deptName},dept_boss_id=#{deptBossId},dept_info=#{deptInfo},dept_founding_time=#{deptFoundingTime} where dept_id=#{deptId}
+    </update>
+    <insert id="addDepartment" parameterType="cn.edu.guet.bean.Department">
+        insert into department_table(dept_id,dept_name,dept_boss_id,dept_info,dept_founding_time) values(#{deptId},#{deptName},#{deptBossId},#{deptInfo},#{deptFoundingTime})
+    </insert>
+</mapper>

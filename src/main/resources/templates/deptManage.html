@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <link rel="stylesheet" href="/css/layui.css">
+    <link rel="stylesheet" href="/css/alert.css">
+
+    <script src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/layer/layer.js"></script>
+    <script type="text/javascript" src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+        <a href="/dept/deptMain">部门管理</a>
+        <a>
+          <cite>部门设置</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+        </a>
+    </div>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input id="keyword" type="text" name="username"  placeholder="请输入关键字" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <button id="search" class="layui-btn"><i class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </div>
+                    <div class="layui-card-header">
+                        <button id="addDepartment" class="layui-btn"><i class="layui-icon"></i>新建</button>
+                        <button class="layui-btn" id="exportExcel"><a href="/dept/outputExcel" ><i class="layui-icon">导出</i></a></button>
+                        <button class="layui-btn layui-btn-danger"><i class="layui-icon"></i>批量删除</button>
+                    </div>
+                    <div class="layui-card-body ">
+                        <table class="layui-table layui-form" id="deptInfo" th:fragment="deptInfo">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="authority" name="check_all"  lay-skin="primary" lay-filter="check_all">
+                                </th>
+                                <th>部门编号</th>
+                                <th>部门名称</th>
+                                <th>部门主管</th>
+                                <th>部门简介</th>
+                                <th>成立时间</th>
+                                <th>操作</th>
+                            </thead>
+                            <tbody>
+                            <tr th:each="department,infoStat : ${departments}" >
+                                <td>
+                                    <input type="checkbox" name=""  lay-skin="primary">
+                                </td>
+                                <td th:text="${department.deptId}"></td>
+                                <td th:text="${department.deptName}"></td>
+                                <td th:text="${department.deptBossId}"></td>
+                                <td th:text="${department.deptInfo}"></td>
+                                <td th:text="${department.deptFoundingTime}"></td>
+                                <td class="td-manage">
+                                    <a><i class="layui-icon" th:onclick="edit([[${department.deptId}]]);">&#xe642;</i></a>
+                                    <i class="layui-icon" th:onclick="del([[${department.deptId}]]);">&#xe640;</i>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-card-body ">
+                        <div class="page">
+                            <div>
+                                <a class="prev" href="">&lt;&lt;</a>
+                                <a class="num" href="">1</a>
+                                <span class="current">2</span>
+                                <a class="num" href="">3</a>
+                                <a class="num" href="">489</a>
+                                <a class="next" href="">&gt;&gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="addWapper" style="display: none;margin-left: 70px;margin-top: 30px">
+        <div class="input_1">
+            <label>部门编号:&nbsp;&nbsp;&nbsp;</label><input type="text" name="deptId" placeholder="&nbsp;请输入部门编号">
+        </div>
+        <div class="input_1">
+            <label>部门名称:&nbsp;&nbsp;&nbsp;</label><input type="text" name="deptName"  placeholder="&nbsp;请输入部门名称">
+        </div>
+        <div class="input_1">
+            <label>部门主管:&nbsp;&nbsp;&nbsp;</label><input type="text" name="deptBossId" placeholder="&nbsp;请选择部门主管">
+        </div>
+        <div class="input_1">
+            <label>部门简介:&nbsp;&nbsp;&nbsp;</label><input type="text" name="deptInfo" placeholder="&nbsp;请输入部门简介">
+        </div>
+        <div class="input_1">
+            <label>成立时间:&nbsp;&nbsp;&nbsp;</label><input type="datetime-local" step="1" name="deptFoundingTime" placeholder="&nbsp;请选择成立时间">
+        </div>
+        <div class="input_1">
+            <input class="addSubmit" type="submit" value="提&nbsp;交" id="allclose" onclick="addSubmit()">
+        </div>
+    </div>
+    <div class="editWapper" style="display: none;margin-left: 70px;margin-top: 30px">
+        <div class="input_1">
+            <label>部门编号:&nbsp;&nbsp;&nbsp;</label><input type="text" name="deptId">
+        </div>
+        <div class="input_1">
+            <label>部门名称:&nbsp;&nbsp;&nbsp;</label><input type="text" name="deptName" >
+        </div>
+        <div class="input_1">
+            <label>部门主管:&nbsp;&nbsp;&nbsp;</label><input type="text" name="deptBossId">
+        </div>
+        <div class="input_1">
+            <label>部门简介:&nbsp;&nbsp;&nbsp;</label><input type="text" name="deptInfo">
+        </div>
+        <div class="input_1">
+            <label>成立时间:&nbsp;&nbsp;&nbsp;</label><input type="datetime-local" step="1" name="deptFoundingTime">
+        </div>
+        <div class="input_1">
+            <input class="editSubmit" type="submit" value="提&nbsp;交" id="allclose" onclick="editSubmit()">
+        </div>
+    </div>
+
+
+</body>
+<script>
+    //搜索
+    $("#search").click(function() {
+        var keyword=$("#keyword").val();
+        $('#deptInfo').load("/dept/viewDepartmentByKeyword",{keyword:keyword});
+    })
+
+    //新建
+    $("#addDepartment").on('click',function () {
+        layer.open({
+            type:1,
+            title:"新建部门",
+            maxmin:true,
+            area:['700px','500px'],
+            shadeClose:true,
+            content:$(".addWapper")
+        })
+    })
+    function addSubmit() {
+        var deptId=$(".addWapper input:eq(0)").val();
+        var deptName=$(".addWapper input:eq(1)").val();
+        var deptBossId=$(".addWapper input:eq(2)").val();
+        var deptInfo=$(".addWapper input:eq(3)").val();
+        var deptFoundingTime=$(".addWapper input:eq(4)").val();
+        $.ajax({
+            url: '/dept/addDepartment',
+            type: 'POST',
+            contentType:'application/json',
+            data: JSON.stringify({
+                'deptId':deptId,
+                'deptName':deptName,
+                'deptBossId':deptBossId,
+                'deptInfo':deptInfo,
+                'deptFoundingTime':deptFoundingTime,
+            }),
+            success: function (successInfo) {
+                layer.closeAll();
+                layer.msg(successInfo);
+                $('#deptInfo').load("/dept/viewDepartmentByKeyword",{keyword:null});
+            }
+        })
+    }
+
+    //编辑
+    function edit(id) {
+        $.ajax({
+            cache:false,
+            url: '/dept/getDepartmentById',
+            type: 'POST',
+            dataType:"json",
+            data: {
+                'deptId':id
+            },
+            success: function (department) {
+                alert(department.deptId);
+                $(".editWapper input:eq(0)").val(department.deptId);
+                $(".editWapper input:eq(1)").val(department.deptName);
+                $(".editWapper input:eq(2)").val(department.deptBossId);
+                $(".editWapper input:eq(3)").val(department.deptInfo);
+                $(".editWapper input:eq(4)").val(department.deptFoundingTime);
+            }
+        })
+
+        layer.open({
+            type:1,
+            title:"编辑部门信息",
+            area:['700px','500px'],
+            shadeClose:true,
+            maxmin:true,
+            content:$(".editWapper")
+        })
+    }
+    function editSubmit() {
+        var deptId=$(".editWapper input:eq(0)").val();
+        var deptName=$(".editWapper input:eq(1)").val();
+        var deptBossId=$(".editWapper input:eq(2)").val();
+        var deptInfo=$(".editWapper input:eq(3)").val();
+        var deptFoundingTime=$(".editWapper input:eq(4)").val();
+        $.ajax({
+            url: '/dept/editDepartment',
+            type: 'POST',
+            contentType:'application/json',
+            data: JSON.stringify({
+                'deptId':deptId,
+                'deptName':deptName,
+                'deptBossId':deptBossId,
+                'deptInfo':deptInfo,
+                'deptFoundingTime':deptFoundingTime,
+            }),
+            success: function (successInfo) {
+                layer.closeAll();
+                layer.msg(successInfo);
+                $('#deptInfo').load("/dept/viewDepartmentByKeyword",{keyword:null});
+            }
+        })
+    }
+
+
+    //删除
+    function del(id) {
+        $.ajax({
+            url: '/dept/deleteDepartmentById',
+            type: 'POST',
+            traditional:true,
+            data: {
+                'deptId':id
+            },
+            success: function (message) {
+                alert(message);
+                $('#deptInfo').load("/dept/viewDepartmentByKeyword",{keyword:null});
+            },
+            error:function (message) {
+                alert("违反外键约束，不能删除");
+            }
+        })
+    }
+
+
+</script>
+
+</html>
