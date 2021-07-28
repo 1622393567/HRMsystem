@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.PersonalMapper">
+    <select id="findSelf" parameterType="String" resultType="cn.edu.guet.bean.EmployeesInfo">
+        SELECT EMP_ID,DEPT_ID,POST_ID,EMP_NAME,EMP_SEX,EMP_STATE,EMP_ENTRY_TIME,EMP_IDENTIFY_TYPE,EMP_IDENTIFY_NUMBER,
+        EMP_PHONE_NUMBER,EMP_E_MAIL,EMP_NATION,EMP_NATIVE_PLACE,EMP_BIRTHDAY,EMP_LOCATION,EMP_EDU_BGD,EMP_ENTRY_WAY,EMP_EDU_SCHOOL
+        FROM EMPLOYEES_INFO_TABLE where EMP_ID=#{id}
+    </select>
+    <select id="findSelfByEMP_ID" resultType="cn.edu.guet.bean.EmployeesInfo">
+        SELECT EMP_ID,DEPT_ID,POST_ID,EMP_NAME,EMP_SEX,EMP_STATE,EMP_ENTRY_TIME,EMP_IDENTIFY_TYPE,EMP_IDENTIFY_NUMBER,
+        EMP_PHONE_NUMBER,EMP_E_MAIL,EMP_NATION,EMP_NATIVE_PLACE,EMP_BIRTHDAY,EMP_LOCATION,EMP_EDU_BGD,EMP_ENTRY_WAY,EMP_EDU_SCHOOL
+        FROM EMPLOYEES_INFO_TABLE where EMP_ID=#{EMP_ID}
+    </select>
+    <update id="updateInfo" parameterType="cn.edu.guet.bean.EmployeesInfo">
+        update EMPLOYEES_INFO_TABLE
+        set EMP_PHONE_NUMBER=#{EMP_PHONE_NUMBER,jdbcType=VARCHAR},EMP_E_MAIL=#{EMP_E_MAIL,jdbcType=VARCHAR},EMP_LOCATION=#{EMP_LOCATION,jdbcType=VARCHAR}
+        where EMP_ID=#{EMP_ID}
+    </update>
+    <select id="findAccountByEMP_ID" resultType="cn.edu.guet.bean.EmpAccount">
+        SELECT * FROM EMP_ACCOUNT_TABLE where EMP_ID=#{EMP_ID}
+    </select>
+    <update id="updatePassword" parameterType="cn.edu.guet.bean.EmpAccount">
+        update EMP_ACCOUNT_TABLE set emp_password=#{emp_password,jdbcType=VARCHAR}
+                                        where emp_id=#{emp_id,jdbcType=VARCHAR}
+    </update>
+</mapper>

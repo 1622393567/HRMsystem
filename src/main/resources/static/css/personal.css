@@ -1,0 +1,42 @@
+table {
+    border:2px;
+    border-color: #E6E6E6;
+    margin-top:50px;
+    margin-left: 150px;
+    display: block;
+    font-size: 18px;
+    font-family: '宋体';
+    color:#595959;
+    text-align: center;
+}
+tbody tr {
+    display: inline-block;
+}
+th, td {
+    width:300px;
+    height: 40px;
+    display: block;
+}
+th{
+    width: 300px;
+    height: 40px;
+    display: block;
+}
+h3{
+    color:#595959;
+    margin-top:20px;
+    margin-left: 150px;
+}
+button{
+    width:100px;
+    height:30px;
+    font-size: 18px;
+    background-color:#009688 ;
+    color: white;
+    border:none;
+    border-radius: 10px;
+}
+.layui-form{
+    margin-top: 30px;
+    margin-left: 50px;
+}

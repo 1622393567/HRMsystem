@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.EmployeesInfoMapper">
+    <select id="findDeptUserAll" parameterType="String" resultType="cn.edu.guet.bean.EmployeesInfo">
+        SELECT EMP_ID,DEPT_ID,POST_ID,EMP_NAME,EMP_SEX,EMP_STATE,EMP_ENTRY_TIME,EMP_IDENTIFY_TYPE,EMP_IDENTIFY_NUMBER,
+        EMP_PHONE_NUMBER,EMP_E_MAIL,EMP_NATION,EMP_NATIVE_PLACE,EMP_BIRTHDAY,EMP_LOCATION,EMP_EDU_BGD,EMP_ENTRY_WAY,EMP_EDU_SCHOOL
+        FROM EMPLOYEES_INFO_TABLE
+        WHERE DEPT_ID=(SELECT DEPT_ID FROM EMPLOYEES_INFO_TABLE
+        where EMP_ID=#{id})
+    </select>
+    <select id="findUserAll"  resultType="cn.edu.guet.bean.EmployeesInfo">
+        SELECT EMP_ID,DEPT_ID,POST_ID,EMP_NAME,EMP_SEX,EMP_STATE,EMP_ENTRY_TIME,EMP_IDENTIFY_TYPE,EMP_IDENTIFY_NUMBER,
+        EMP_PHONE_NUMBER,EMP_E_MAIL,EMP_NATION,EMP_NATIVE_PLACE,EMP_BIRTHDAY,EMP_LOCATION,EMP_EDU_BGD,EMP_ENTRY_WAY,EMP_EDU_SCHOOL
+        FROM EMPLOYEES_INFO_TABLE order by DEPT_ID
+    </select>
+</mapper>
