@@ -1,16 +1,16 @@
-/** layui-v2.4.5 MIT License By https://www.layui.com */
+/*! layer-v3.5.1 Web 通用弹出层组件 MIT License */
 ;!function (e, t) {
     "use strict";
     var i, n, a = e.layui && layui.define, o = {
         getPath: function () {
-            var e = document.currentScript ? document.currentScript.src : function () {
+            var t = document.currentScript ? document.currentScript.src : function () {
                 for (var e, t = document.scripts, i = t.length - 1, n = i; n > 0; n--) if ("interactive" === t[n].readyState) {
                     e = t[n].src;
                     break
                 }
                 return e || t[i].src
-            }();
-            return e.substring(0, e.lastIndexOf("/") + 1)
+            }(), i = e.LAYUI_GLOBAL || {};
+            return i.layer_dir || t.substring(0, t.lastIndexOf("/") + 1)
         }(),
         config: {},
         end: {},
@@ -26,14 +26,17 @@
             if (r.path) {
                 var a = document.getElementsByTagName("head")[0], s = document.createElement("link");
                 "string" == typeof i && (n = i);
-                var l = (n || t).replace(/\.|\//g, ""), f = "layuicss-" + l, c = 0;
-                s.rel = "stylesheet", s.href = r.path + t, s.id = f, document.getElementById(f) || a.appendChild(s), "function" == typeof i && !function u() {
-                    return ++c > 80 ? e.console && console.error("layer.css: Invalid") : void (1989 === parseInt(o.getStyle(document.getElementById(f), "width")) ? i() : setTimeout(u, 100))
+                var l = (n || t).replace(/\.|\//g, ""), f = "layuicss-" + l, c = "creating", u = 0;
+                s.rel = "stylesheet", s.href = r.path + t, s.id = f, document.getElementById(f) || a.appendChild(s), "function" == typeof i && !function d(t) {
+                    var n = 100, a = document.getElementById(f);
+                    return ++u > 1e4 / n ? e.console && console.error(l + ".css: Invalid") : void (1989 === parseInt(o.getStyle(a, "width")) ? (t === c && a.removeAttribute("lay-status"), a.getAttribute("lay-status") === c ? setTimeout(d, n) : i()) : (a.setAttribute("lay-status", c), setTimeout(function () {
+                        d(c)
+                    }, n)))
                 }()
             }
         }
     }, r = {
-        v: "3.1.1", ie: function () {
+        v: "3.5.1", ie: function () {
             var t = navigator.userAgent.toLowerCase();
             return !!(e.ActiveXObject || "ActiveXObject" in e) && ((t.match(/msie\s(\d+)/) || [])[1] || "11")
         }(), index: e.layer && e.layer.v ? 1e5 : 0, path: o.getPath, config: function (e, t) {
@@ -74,18 +77,20 @@
                 shade: !1,
                 resize: !1,
                 fixed: !1,
-                maxWidth: 210
+                maxWidth: 260
             }, n))
         }
     }, s = function (e) {
-        var t = this;
-        t.index = ++r.index, t.config = i.extend({}, t.config, o.config, e), document.body ? t.creat() : setTimeout(function () {
+        var t = this, a = function () {
             t.creat()
+        };
+        t.index = ++r.index, t.config.maxWidth = i(n).width() - 30, t.config = i.extend({}, t.config, o.config, e), document.body ? a() : setTimeout(function () {
+            a()
         }, 30)
     };
     s.pt = s.prototype;
     var l = ["layui-layer", ".layui-layer-title", ".layui-layer-main", ".layui-layer-dialog", "layui-layer-iframe", "layui-layer-content", "layui-layer-btn", "layui-layer-close"];
-    l.anim = ["layer-anim-00", "layer-anim-01", "layer-anim-02", "layer-anim-03", "layer-anim-04", "layer-anim-05", "layer-anim-06"], s.pt.config = {
+    l.anim = ["layer-anim-00", "layer-anim-01", "layer-anim-02", "layer-anim-03", "layer-anim-04", "layer-anim-05", "layer-anim-06"], l.SHADE = "layui-layer-shade", l.MOVE = "layui-layer-move", s.pt.config = {
         type: 0,
         shade: .3,
         fixed: !0,
@@ -99,6 +104,7 @@
         maxWidth: 360,
         anim: 0,
         isOutAnim: !0,
+        minStack: !0,
         icon: -1,
         moveType: 1,
         resize: !0,
@@ -108,7 +114,7 @@
         var n = this, a = n.index, r = n.config, s = r.zIndex + a, f = "object" == typeof r.title,
             c = r.maxmin && (1 === r.type || 2 === r.type),
             u = r.title ? '<div class="layui-layer-title" style="' + (f ? r.title[1] : "") + '">' + (f ? r.title[0] : r.title) + "</div>" : "";
-        return r.zIndex = s, t([r.shade ? '<div class="layui-layer-shade" id="layui-layer-shade' + a + '" times="' + a + '" style="' + ("z-index:" + (s - 1) + "; ") + '"></div>' : "", '<div class="' + l[0] + (" layui-layer-" + o.type[r.type]) + (0 != r.type && 2 != r.type || r.shade ? "" : " layui-layer-border") + " " + (r.skin || "") + '" id="' + l[0] + a + '" type="' + o.type[r.type] + '" times="' + a + '" showtime="' + r.time + '" conType="' + (e ? "object" : "string") + '" style="z-index: ' + s + "; width:" + r.area[0] + ";height:" + r.area[1] + (r.fixed ? "" : ";position:absolute;") + '">' + (e && 2 != r.type ? "" : u) + '<div id="' + (r.id || "") + '" class="layui-layer-content' + (0 == r.type && r.icon !== -1 ? " layui-layer-padding" : "") + (3 == r.type ? " layui-layer-loading" + r.icon : "") + '">' + (0 == r.type && r.icon !== -1 ? '<i class="layui-layer-ico layui-layer-ico' + r.icon + '"></i>' : "") + (1 == r.type && e ? "" : r.content || "") + '</div><span class="layui-layer-setwin">' + function () {
+        return r.zIndex = s, t([r.shade ? '<div class="' + l.SHADE + '" id="' + l.SHADE + a + '" times="' + a + '" style="' + ("z-index:" + (s - 1) + "; ") + '"></div>' : "", '<div class="' + l[0] + (" layui-layer-" + o.type[r.type]) + (0 != r.type && 2 != r.type || r.shade ? "" : " layui-layer-border") + " " + (r.skin || "") + '" id="' + l[0] + a + '" type="' + o.type[r.type] + '" times="' + a + '" showtime="' + r.time + '" conType="' + (e ? "object" : "string") + '" style="z-index: ' + s + "; width:" + r.area[0] + ";height:" + r.area[1] + ";position:" + (r.fixed ? "fixed;" : "absolute;") + '">' + (e && 2 != r.type ? "" : u) + '<div id="' + (r.id || "") + '" class="layui-layer-content' + (0 == r.type && r.icon !== -1 ? " layui-layer-padding" : "") + (3 == r.type ? " layui-layer-loading" + r.icon : "") + '">' + (0 == r.type && r.icon !== -1 ? '<i class="layui-layer-ico layui-layer-ico' + r.icon + '"></i>' : "") + (1 == r.type && e ? "" : r.content || "") + '</div><span class="layui-layer-setwin">' + function () {
             var e = c ? '<a class="layui-layer-min" href="javascript:;"><cite></cite></a><a class="layui-layer-ico layui-layer-max" href="javascript:;"></a>' : "";
             return r.closeBtn && (e += '<a class="layui-layer-ico ' + l[7] + " " + l[7] + (r.title ? r.closeBtn : 4 == r.type ? "1" : "2") + '" href="javascript:;"></a>'), e
         }() + "</span>" + (r.btn ? function () {
@@ -116,7 +122,7 @@
             "string" == typeof r.btn && (r.btn = [r.btn]);
             for (var t = 0, i = r.btn.length; t < i; t++) e += '<a class="' + l[6] + t + '">' + r.btn[t] + "</a>";
             return '<div class="' + l[6] + " layui-layer-btn-" + (r.btnAlign || "") + '">' + e + "</div>"
-        }() : "") + (r.resize ? '<span class="layui-layer-resize"></span>' : "") + "</div>"], u, i('<div class="layui-layer-move"></div>')), n
+        }() : "") + (r.resize ? '<span class="layui-layer-resize"></span>' : "") + "</div>"], u, i('<div class="' + l.MOVE + '" id="' + l.MOVE + '"></div>')), n
     }, s.pt.creat = function () {
         var e = this, t = e.config, a = e.index, s = t.content, f = "object" == typeof s, c = i("body");
         if (!t.id || !i("#" + t.id)[0]) {
@@ -141,11 +147,17 @@
                     }() : function () {
                         s.parents("." + l[0])[0] || (s.data("display", s.css("display")).show().addClass("layui-layer-wrap").wrap(n[1]), i("#" + l[0] + a).find("." + l[5]).before(r))
                     }()
-                }() : c.append(n[1]), i(".layui-layer-move")[0] || c.append(o.moveElem = u), e.layero = i("#" + l[0] + a), t.scrollbar || l.html.css("overflow", "hidden").attr("layer-full", a)
-            }).auto(a), i("#layui-layer-shade" + e.index).css({
+                }() : c.append(n[1]), i("#" + l.MOVE)[0] || c.append(o.moveElem = u), e.layero = i("#" + l[0] + a), e.shadeo = i("#" + l.SHADE + a), t.scrollbar || l.html.css("overflow", "hidden").attr("layer-full", a)
+            }).auto(a), e.shadeo.css({
                 "background-color": t.shade[1] || "#000",
                 opacity: t.shade[0] || t.shade
-            }), 2 == t.type && 6 == r.ie && e.layero.find("iframe").attr("src", s[0]), 4 == t.type ? e.tips() : e.offset(), t.fixed && n.on("resize", function () {
+            }), 2 == t.type && 6 == r.ie && e.layero.find("iframe").attr("src", s[0]), 4 == t.type ? e.tips() : function () {
+                e.offset(), parseInt(o.getStyle(document.getElementById(l.MOVE), "z-index")) || function () {
+                    e.layero.css("visibility", "hidden"), r.ready(function () {
+                        e.offset(), e.layero.css("visibility", "visible")
+                    })
+                }()
+            }(), t.fixed && n.on("resize", function () {
                 e.offset(), (/^\d+%$/.test(t.area[0]) || /^\d+%$/.test(t.area[1])) && e.auto(a), 4 == t.type && e.tips()
             }), t.time <= 0 || setTimeout(function () {
                 r.close(e.index)
@@ -242,14 +254,14 @@
                 var o = a["btn" + (e + 1)] && a["btn" + (e + 1)](t.index, n);
                 o === !1 || r.close(t.index)
             }
-        }), n.find("." + l[7]).on("click", e), a.shadeClose && i("#layui-layer-shade" + t.index).on("click", function () {
+        }), n.find("." + l[7]).on("click", e), a.shadeClose && t.shadeo.on("click", function () {
             r.close(t.index)
         }), n.find(".layui-layer-min").on("click", function () {
-            var e = a.min && a.min(n);
+            var e = a.min && a.min(n, t.index);
             e === !1 || r.min(t.index, a)
         }), n.find(".layui-layer-max").on("click", function () {
-            i(this).hasClass("layui-layer-maxmin") ? (r.restore(t.index), a.restore && a.restore(n)) : (r.full(t.index, a), setTimeout(function () {
-                a.full && a.full(n)
+            i(this).hasClass("layui-layer-maxmin") ? (r.restore(t.index), a.restore && a.restore(n, t.index)) : (r.full(t.index, a), setTimeout(function () {
+                a.full && a.full(n, t.index)
             }, 100))
         }), a.end && (o.end[t.index] = a.end)
     }, o.reselect = function () {
@@ -293,27 +305,22 @@
         a.attr("minLeft");
         s !== o.type[3] && s !== o.type[4] && (n || (parseFloat(t.width) <= 260 && (t.width = 260), parseFloat(t.height) - f - c <= 64 && (t.height = 64 + f + c)), a.css(t), c = a.find("." + l[6]).outerHeight(), s === o.type[2] ? a.find("iframe").css({height: parseFloat(t.height) - f - c}) : r.css({height: parseFloat(t.height) - f - c - parseFloat(r.css("padding-top")) - parseFloat(r.css("padding-bottom"))}))
     }, r.min = function (e, t) {
-        var a = i("#" + l[0] + e), s = a.find(l[1]).outerHeight() || 0,
-            f = a.attr("minLeft") || 181 * o.minIndex + "px", c = a.css("position");
-        o.record(a), o.minLeft[0] && (f = o.minLeft[0], o.minLeft.shift()), a.attr("position", c), r.style(e, {
-            width: 180,
-            height: s,
-            left: f,
-            top: n.height() - s,
-            position: "fixed",
-            overflow: "hidden"
-        }, !0), a.find(".layui-layer-min").hide(), "page" === a.attr("type") && a.find(l[4]).hide(), o.rescollbar(e), a.attr("minLeft") || o.minIndex++, a.attr("minLeft", f)
+        t = t || {};
+        var a = i("#" + l[0] + e), s = i("#" + l.SHADE + e), f = a.find(l[1]).outerHeight() || 0,
+            c = a.attr("minLeft") || 181 * o.minIndex + "px", u = a.css("position"),
+            d = {width: 180, height: f, position: "fixed", overflow: "hidden"};
+        o.record(a), o.minLeft[0] && (c = o.minLeft[0], o.minLeft.shift()), t.minStack && (d.left = c, d.top = n.height() - f, a.attr("minLeft") || o.minIndex++, a.attr("minLeft", c)), a.attr("position", u), r.style(e, d, !0), a.find(".layui-layer-min").hide(), "page" === a.attr("type") && a.find(l[4]).hide(), o.rescollbar(e), s.hide()
     }, r.restore = function (e) {
-        var t = i("#" + l[0] + e), n = t.attr("area").split(",");
+        var t = i("#" + l[0] + e), n = i("#" + l.SHADE + e), a = t.attr("area").split(",");
         t.attr("type");
         r.style(e, {
-            width: parseFloat(n[0]),
-            height: parseFloat(n[1]),
-            top: parseFloat(n[2]),
-            left: parseFloat(n[3]),
+            width: parseFloat(a[0]),
+            height: parseFloat(a[1]),
+            top: parseFloat(a[2]),
+            left: parseFloat(a[3]),
             position: t.attr("position"),
             overflow: "visible"
-        }, !0), t.find(".layui-layer-max").removeClass("layui-layer-maxmin"), t.find(".layui-layer-min").show(), "page" === t.attr("type") && t.find(l[4]).show(), o.rescollbar(e)
+        }, !0), t.find(".layui-layer-max").removeClass("layui-layer-maxmin"), t.find(".layui-layer-min").show(), "page" === t.attr("type") && t.find(l[4]).show(), o.rescollbar(e), n.show()
     }, r.full = function (e) {
         var t, a = i("#" + l[0] + e);
         o.record(a), l.html.attr("layer-full") || l.html.css("overflow", "hidden").attr("layer-full", e), clearTimeout(t), t = setTimeout(function () {
@@ -328,33 +335,35 @@
     }, r.title = function (e, t) {
         var n = i("#" + l[0] + (t || r.index)).find(l[1]);
         n.html(e)
-    }, r.close = function (e) {
-        var t = i("#" + l[0] + e), n = t.attr("type"), a = "layer-anim-close";
-        if (t[0]) {
-            var s = "layui-layer-wrap", f = function () {
-                if (n === o.type[1] && "object" === t.attr("conType")) {
-                    t.children(":not(." + l[5] + ")").remove();
-                    for (var a = t.find("." + s), r = 0; r < 2; r++) a.unwrap();
-                    a.css("display", a.data("display")).removeClass(s)
+    }, r.close = function (e, t) {
+        var n = i("#" + l[0] + e), a = n.attr("type"), s = "layer-anim-close";
+        if (n[0]) {
+            var f = "layui-layer-wrap", c = function () {
+                if (a === o.type[1] && "object" === n.attr("conType")) {
+                    n.children(":not(." + l[5] + ")").remove();
+                    for (var r = n.find("." + f), s = 0; s < 2; s++) r.unwrap();
+                    r.css("display", r.data("display")).removeClass(f)
                 } else {
-                    if (n === o.type[2]) try {
-                        var f = i("#" + l[4] + e)[0];
-                        f.contentWindow.document.write(""), f.contentWindow.close(), t.find("." + l[5])[0].removeChild(f)
-                    } catch (c) {
+                    if (a === o.type[2]) try {
+                        var c = i("#" + l[4] + e)[0];
+                        c.contentWindow.document.write(""), c.contentWindow.close(), n.find("." + l[5])[0].removeChild(c)
+                    } catch (u) {
                     }
-                    t[0].innerHTML = "", t.remove()
+                    n[0].innerHTML = "", n.remove()
                 }
-                "function" == typeof o.end[e] && o.end[e](), delete o.end[e]
+                "function" == typeof o.end[e] && o.end[e](), delete o.end[e], "function" == typeof t && t()
             };
-            t.data("isOutAnim") && t.addClass("layer-anim " + a), i("#layui-layer-moves, #layui-layer-shade" + e).remove(), 6 == r.ie && o.reselect(), o.rescollbar(e), t.attr("minLeft") && (o.minIndex--, o.minLeft.push(t.attr("minLeft"))), r.ie && r.ie < 10 || !t.data("isOutAnim") ? f() : setTimeout(function () {
-                f()
+            n.data("isOutAnim") && n.addClass("layer-anim " + s), i("#layui-layer-moves, #" + l.SHADE + e).remove(), 6 == r.ie && o.reselect(), o.rescollbar(e), n.attr("minLeft") && (o.minIndex--, o.minLeft.push(n.attr("minLeft"))), r.ie && r.ie < 10 || !n.data("isOutAnim") ? c() : setTimeout(function () {
+                c()
             }, 200)
         }
-    }, r.closeAll = function (e) {
-        i.each(i("." + l[0]), function () {
-            var t = i(this), n = e ? t.attr("type") === e : 1;
-            n && r.close(t.attr("times")), n = null
-        })
+    }, r.closeAll = function (e, t) {
+        "function" == typeof e && (t = e, e = null);
+        var n = i("." + l[0]);
+        i.each(n, function (a) {
+            var o = i(this), s = e ? o.attr("type") === e : 1;
+            s && r.close(o.attr("times"), a === n.length - 1 ? t : null), s = null
+        }), 0 === n.length && "function" == typeof t && t()
     };
     var f = r.cache || {}, c = function (e) {
         return f.skin ? " " + f.skin + " " + f.skin + "-" + e : ""
@@ -421,7 +430,8 @@
 
         var s = {};
         if (t = t || {}, t.photos) {
-            var l = t.photos.constructor === Object, f = l ? t.photos : {}, u = f.data || [], d = f.start || 0;
+            var l = !("string" == typeof t.photos || t.photos instanceof i), f = l ? t.photos : {}, u = f.data || [],
+                d = f.start || 0;
             s.imgIndex = (0 | d) + 1, t.img = t.img || "img";
             var y = t.success;
             if (delete t.success, l) {
@@ -440,8 +450,9 @@
                 };
                 if (h(), 0 === u.length) return;
                 if (n || p.on("click", t.img, function () {
+                    h();
                     var e = i(this), n = e.attr("layer-index");
-                    r.photos(i.extend(t, {photos: {start: n, data: u, tab: t.tab}, full: t.full}), !0), h()
+                    r.photos(i.extend(t, {photos: {start: n, data: u, tab: t.tab}, full: t.full}), !0)
                 }), !n) return
             }
             s.imgprev = function (e) {
@@ -456,17 +467,13 @@
             }, s.tabimg = function (e) {
                 if (!(u.length <= 1)) return f.start = s.imgIndex - 1, r.close(s.index), r.photos(t, !0, e)
             }, s.event = function () {
-                s.bigimg.hover(function () {
-                    s.imgsee.show()
-                }, function () {
-                    s.imgsee.hide()
-                }), s.bigimg.find(".layui-layer-imgprev").on("click", function (e) {
-                    e.preventDefault(), s.imgprev()
+                s.bigimg.find(".layui-layer-imgprev").on("click", function (e) {
+                    e.preventDefault(), s.imgprev(!0)
                 }), s.bigimg.find(".layui-layer-imgnext").on("click", function (e) {
-                    e.preventDefault(), s.imgnext()
+                    e.preventDefault(), s.imgnext(!0)
                 }), i(document).on("keyup", s.keyup)
             }, s.loadi = r.load(1, {shade: !("shade" in t) && .9, scrollbar: !1}), o(u[d].src, function (n) {
-                r.close(s.loadi), s.index = r.open(i.extend({
+                r.close(s.loadi), a && (t.anim = -1), s.index = r.open(i.extend({
                     type: 1,
                     id: "layui-layer-photos",
                     area: function () {
@@ -485,11 +492,14 @@
                     moveType: 1,
                     scrollbar: !1,
                     moveOut: !0,
+                    anim: 5,
                     isOutAnim: !1,
                     skin: "layui-layer-photos" + c("photos"),
-                    content: '<div class="layui-layer-phimg"><img src="' + u[d].src + '" alt="' + (u[d].alt || "") + '" layer-pid="' + u[d].pid + '"><div class="layui-layer-imgsee">' + (u.length > 1 ? '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>' : "") + '<div class="layui-layer-imgbar" style="display:' + (a ? "block" : "") + '"><span class="layui-layer-imgtit"><a href="javascript:;">' + (u[d].alt || "") + "</a><em>" + s.imgIndex + "/" + u.length + "</em></span></div></div></div>",
+                    content: '<div class="layui-layer-phimg"><img src="' + u[d].src + '" alt="' + (u[d].alt || "") + '" layer-pid="' + u[d].pid + '">' + function () {
+                        return u.length > 1 ? '<div class="layui-layer-imgsee"><span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span><div class="layui-layer-imgbar" style="display:' + (a ? "block" : "") + '"><span class="layui-layer-imgtit"><a href="javascript:;">' + (u[d].alt || "") + "</a><em>" + s.imgIndex + " / " + u.length + "</em></span></div></div>" : ""
+                    }() + "</div>",
                     success: function (e, i) {
-                        s.bigimg = e.find(".layui-layer-phimg"), s.imgsee = e.find(".layui-layer-imguide,.layui-layer-imgbar"), s.event(e), t.tab && t.tab(u[d], e), "function" == typeof y && y(e)
+                        s.bigimg = e.find(".layui-layer-phimg"), s.imgsee = e.find(".layui-layer-imgbar"), s.event(e), t.tab && t.tab(u[d], e), "function" == typeof y && y(e)
                     },
                     end: function () {
                         s.end = !0, i(document).off("keyup", s.keyup)
@@ -515,6 +525,6 @@
     })) : "function" == typeof define && define.amd ? define(["jquery"], function () {
         return o.run(e.jQuery), r
     }) : function () {
-        o.run(e.jQuery), r.ready()
+        r.ready(), o.run(e.jQuery)
     }()
 }(window);

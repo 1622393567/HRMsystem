@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.UserMapper">
+    <resultMap id="userMap" type="cn.edu.guet.bean.User">
+        <result property="empId" column="emp_id"></result>
+        <result property="empPassword" column="emp_password"></result>
+        <result property="postId" column="post_id"></result>
+        <result property="empPhoneNumber" column="emp_phone_number"></result>
+    </resultMap>
+
+    <select id="viewUser" resultMap="userMap">
+        select emp_account_table.emp_id,emp_account_table.emp_password,emp_account_table.post_id,emp_account_table.emp_phone_number from emp_account_table
+    </select>
+    <select id="viewUserByKeyword" parameterType="string" resultMap="userMap">
+        <bind name="pattern" value="'%' + keyword + '%'"/>
+        select emp_account_table.emp_id,emp_account_table.emp_password,emp_account_table.post_id,emp_account_table.emp_phone_number from emp_account_table
+        WHERE
+        emp_id LIKE #{pattern}
+        OR
+        emp_password LIKE #{pattern}
+        OR
+        post_id like #{pattern}
+        OR
+        emp_phone_number like #{pattern}
+    </select>
+    <delete id="deleteUserById" parameterType="string">
+        delete from emp_account_table where emp_id=#{emp_id}
+    </delete>
+
+    <delete id="deleteUserByIds" parameterType="string">
+        delete from emp_account_table where emp_id in
+        <foreach item="ids" collection="array" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+    <select id="getUserById" parameterType="string" resultMap="userMap">
+        select emp_account_table.emp_id,emp_account_table.emp_password,emp_account_table.post_id,emp_account_table.emp_phone_number from emp_account_table where emp_id=#{emp_id}
+    </select>
+    <update id="editUser" parameterType="cn.edu.guet.bean.User">
+        update emp_account_table set emp_id=#{empId},emp_password=#{empPassword},post_id=#{postId},emp_phone_number=#{empPhoneNumber} where emp_id=#{empId}
+    </update>
+    <insert id="addUser" parameterType="cn.edu.guet.bean.User">
+        insert into emp_account_table(emp_id,emp_password,post_id,emp_phone_number) values(#{empId},#{empPassword},#{postId},#{empPhoneNumber})
+    </insert>
+
+</mapper>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <link rel="stylesheet" href="/css/alert.css">
+
+    <script src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/layer/layer.js"></script>
+    <script type="text/javascript" src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/xadmin.js"></script>
+    <script type="text/javascript" src="/js/deptPage.js"></script>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script> <!--[if lt IE 9] -->
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a>业务处理</a>
+            <a><cite>职位管理</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+        </a>
+    </div>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input id="keyword" type="text" name="username"  placeholder="请输入关键字" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <button id="search" class="layui-btn"><i class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </div>
+                    <div class="layui-card-header">
+                        <button id="addPost" class="layui-btn"><i class="layui-icon"></i>新建</button>
+                        <button class="layui-btn" id="exportExcel"><a href="/post/outputExcel" style="color: white"><i class="layui-icon">&#xe67d;</i>导出</a></button>
+                        <button id="deleteMany" class="layui-btn layui-btn-danger"><i class="layui-icon"></i>批量删除</button>
+                    </div>
+                    <div class="layui-card-body ">
+                        <table class="layui-table layui-form" id="postInfo" th:fragment="postInfo">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <input id="choose_all" type="checkbox" style="display: inline-block">
+                                </th>
+                                <th>职位编号</th>
+                                <th>职位名称</th>
+                                <th>职位级别</th>
+                                <th>职位简介</th>
+                                <th>操作</th>
+                            </thead>
+                            <tbody id="adminTbody">
+                            <tr th:each="post,infoStat : ${posts}" >
+                                <td>
+                                    <input class="checkbox" type="checkbox" style="display: inline-block" th:value="${post.postId}">
+                                </td>
+                                <td th:text="${post.postId}"></td>
+                                <td th:text="${post.postName}"></td>
+                                <td th:text="${post.postLevel}"></td>
+                                <td th:text="${post.postResp}"></td>
+                                <td class="td-manage">
+                                    <a><i class="layui-icon" th:onclick="edit([[${post.postId}]]);">&#xe642;</i></a>
+                                    <i class="layui-icon" th:onclick="del([[${post.postId}]]);">&#xe640;</i>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-card-body ">
+                        <div class="page">
+                            <div>
+                                <a class="num" href="###" id="firstPage">首页</a>
+                                <a class="prev" href="###" id="prePage">&lt;&lt;</a>
+                                <span class="current" id="currentPage"></span>
+                                <a class="next" href="###"id="nextPage">&gt;&gt;</a>
+                                <a class="num" href="###" id="lastPage">尾页</a>
+                                <a class="num" href="###" id="totalpage"></a>
+                                <a class="num"> <select  id="jumpWhere"> </select></a>
+                                <a href="###" id="jumpPage" onclick="jumpPage()">跳转</a>
+                                <a class="num" id="countsum"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="addWapper" style="display: none;margin-left: 70px;margin-top: 30px">
+        <div class="input_1">
+            <label>职位编号:&nbsp;&nbsp;&nbsp;</label><input type="text" name="postId" placeholder="&nbsp;请输入职位编号">
+        </div>
+        <div class="input_1">
+            <label>职位名称:&nbsp;&nbsp;&nbsp;</label><input type="text" name="postName"  placeholder="&nbsp;请输入职位名称">
+        </div>
+        <div class="input_1">
+            <label>职位层级:&nbsp;&nbsp;&nbsp;</label><input type="text" name="postLevel" placeholder="&nbsp;请选择职位层级">
+        </div>
+        <div class="input_1">
+            <label>职位简介:&nbsp;&nbsp;&nbsp;</label><input type="text" name="postResp" placeholder="&nbsp;请输入职位简介">
+        </div>
+        <div class="input_1">
+            <input class="addSubmit" type="submit" value="提&nbsp;交" id="allclose" onclick="addSubmit()">
+        </div>
+    </div>
+    <div class="editWapper" style="display: none;margin-left: 70px;margin-top: 30px">
+        <div class="input_1">
+            <label>职位编号:&nbsp;&nbsp;&nbsp;</label><input type="text" name="postId">
+        </div>
+        <div class="input_1">
+            <label>职位名称:&nbsp;&nbsp;&nbsp;</label><input type="text" name="postName" >
+        </div>
+        <div class="input_1">
+            <label>职位层级:&nbsp;&nbsp;&nbsp;</label><input type="text" name="postLevel">
+        </div>
+        <div class="input_1">
+            <label>职位简介:&nbsp;&nbsp;&nbsp;</label><input type="text" name="postResp">
+        </div>
+        <div class="input_1">
+            <input class="editSubmit" type="submit" value="提&nbsp;交" id="allclose" onclick="editSubmit()">
+        </div>
+    </div>
+
+</body>
+<script>
+    //搜索
+    $("#search").click(function() {
+        var keyword=$("#keyword").val();
+        $('#postInfo').load("/post/viewPostByKeyword",{keyword:keyword});
+    })
+
+    //新建
+    $("#addPost").on('click',function () {
+        layer.open({
+            type:1,
+            title:"增添职位",
+            maxmin:true,
+            area:['700px','500px'],
+            shadeClose:true,
+            content:$(".addWapper")
+        })
+    })
+    function addSubmit() {
+        var postId=$(".addWapper input:eq(0)").val();
+        var postName=$(".addWapper input:eq(1)").val();
+        var postLevel=$(".addWapper input:eq(2)").val();
+        var postResp=$(".addWapper input:eq(3)").val();
+        $.ajax({
+            url: '/post/addPost',
+            type: 'POST',
+            contentType:'application/json',
+            data: JSON.stringify({
+                'postId':postId,
+                'postName':postName,
+                'postLevel':postLevel,
+                'postResp':postResp,
+            }),
+            success: function (successInfo) {
+                layer.closeAll();
+                layer.msg(successInfo);
+                $('#postInfo').load("/post/viewPostByKeyword",{keyword:null});
+            }
+        })
+    }
+
+    //编辑
+    function edit(postId) {
+        $.ajax({
+            cache:false,
+            url: '/post/getPostById',
+            type: 'POST',
+            dataType:"json",
+            data: {
+                'postId':postId
+            },
+            success: function (post) {
+                $(".editWapper input:eq(0)").val(post.postId);
+                $(".editWapper input:eq(1)").val(post.postName);
+                $(".editWapper input:eq(2)").val(post.postLevel);
+                $(".editWapper input:eq(3)").val(post.postResp);
+            }
+        })
+
+        layer.open({
+            type:1,
+            title:"编辑职位信息",
+            area:['700px','500px'],
+            shadeClose:true,
+            maxmin:true,
+            content:$(".editWapper")
+        })
+    }
+    function editSubmit() {
+        var postId=$(".editWapper input:eq(0)").val();
+        var postName=$(".editWapper input:eq(1)").val();
+        var postLevel=$(".editWapper input:eq(2)").val();
+        var postResp=$(".editWapper input:eq(3)").val();
+        $.ajax({
+            url: '/post/editPost',
+            type: 'POST',
+            contentType:'application/json',
+            data: JSON.stringify({
+                'postId':postId,
+                'postName':postName,
+                'postLevel':postLevel,
+                'postResp':postResp,
+            }),
+            success: function (successInfo) {
+                layer.closeAll();
+                layer.msg(successInfo);
+                $('#postInfo').load("/post/viewPostByKeyword",{keyword:null});
+            }
+        })
+    }
+
+    //删除
+    function del(id) {
+        $.ajax({
+            url: '/post/deletePostById',
+            type: 'POST',
+            traditional:true,
+            data: {
+                'postId':id
+            },
+            success: function (message) {
+                layer.msg("成功删除！")
+                $('#postInfo').load("/post/viewPostByKeyword",{keyword:null});
+            },
+            error:function (message) {
+                layer.msg("违反外键约束，无法删除！")
+            }
+        })
+    }
+
+    $("#choose_all").click(function () {
+        if ($(this).prop("checked")){
+            $("input:checkbox").each(function () {
+                $(this).prop("checked",true);
+            })
+        }else{
+            $("input:checkbox").each(function () {
+                $(this).prop("checked",false);
+            })
+        }
+    })
+
+    //批量删除
+    $("#choose_all").click(function () {
+        if ($(this).prop("checked")){
+            $("input:checkbox").each(function () {
+                $(this).prop("checked",true);
+            })
+        }else{
+            $("input:checkbox").each(function () {
+                $(this).prop("checked",false);
+            })
+        }
+    })
+    $("#deleteMany").click(function () {
+        var ids=[];
+        $(".checkbox").each(function () {
+            if (this.checked==true){
+                ids.push($(this).val());
+            }
+        })
+        $.ajax({
+            url: '/post/deletePostByIds',
+            type: 'POST',
+            data: {
+                'ids':ids
+            },
+            success: function (successInfo) {
+                layer.msg("成功删除！")
+                $('#postInfo').load("/post/viewPostByKeyword",{keyword:null});
+            },
+            error:function (message) {
+                layer.msg("违反外键约束，无法删除！")
+            }
+        })
+    })
+
+
+</script>
+
+</html>
