@@ -14,6 +14,10 @@ public class EmpAccount {
         this.post_id = post_id;
     }
 
+    public EmpAccount(String newpassword) {
+
+    }
+
     public String getEmp_id() {
         return emp_id;
     }
@@ -36,5 +40,14 @@ public class EmpAccount {
 
     public void setPost_id(String post_id) {
         this.post_id = post_id;
+    }
+
+    @Override
+    public String toString() {
+        return "EmpAccount{" +
+                "emp_id='" + emp_id + '\'' +
+                ", emp_password='" + emp_password + '\'' +
+                ", post_id='" + post_id + '\'' +
+                '}';
     }
 }
