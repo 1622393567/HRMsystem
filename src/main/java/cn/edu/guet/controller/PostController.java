@@ -49,6 +49,17 @@ public class PostController {
         return successInfo;
     }
 
+    @PostMapping("deletePostByIds")
+    @ResponseBody
+    public String deleteDepartmentByIds(@RequestParam(value = "ids[]") String[] ids){
+        for (int i=0;i<ids.length;i++){
+            System.out.println(ids[i]+",");
+        }
+        postService.deletePostByIds(ids);
+        String successInfo="成功删除的部门ID：";
+        return successInfo;
+    }
+
     @GetMapping("outputExcel")
     public void outputExcel(HttpServletResponse response) throws IOException {
         postService.outputExcel(response);

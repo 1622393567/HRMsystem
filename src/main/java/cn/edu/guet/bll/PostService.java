@@ -11,6 +11,7 @@ public interface PostService {
     List<Post> viewPost();
     List<Post> viewPostByKeyword(String keyword);
     void deletePostById(String postId);
+    void deletePostByIds(String[] ids);
     void outputExcel(HttpServletResponse response) throws IOException;
 
     Post getPostById(String postId);

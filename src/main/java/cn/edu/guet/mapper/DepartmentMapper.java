@@ -12,6 +12,7 @@ public interface DepartmentMapper {
     List<Department> viewDepartmentByKeyword(String keyword);
 
     void deleteDepartmentById(String deptId);
+    void deleteDepartmentByIds(String[] ids);
 
     Department getDepartmentById(String deptId);
     void editDepartment(Department department);

@@ -35,6 +35,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void deletePostByIds(String[] ids) {
+        postMapper.deletePostByIds(ids);
+    }
+
+    @Override
     public void outputExcel(HttpServletResponse response) throws IOException {
         String sheetName = "职位表";
         String[] headers = {"职位编号","职位名称","职位级别","职位简介"};

@@ -30,9 +30,13 @@ public class UserController {
     @PostMapping("viewUserByKeyword")
     public String viewUserByKeyword(String keyword,HttpServletRequest request){
         List<User> users = userService.viewUserByKeyword(keyword);
-        System.out.println("获取到了："+users.get(0).getEmpPhoneNumber());
         request.setAttribute("users", users);
         return "UserManage::userInfo";  //载到index.html的某个div
+    }
+
+    @GetMapping("outputExcel")
+    public void outputExcel(HttpServletResponse response) throws IOException {
+        userService.outputExcel(response);
     }
 
     @PostMapping("deleteUserById")
@@ -46,8 +50,45 @@ public class UserController {
         return successInfo;
     }
 
-    @GetMapping("outputExcel")
-    public void outputExcel(HttpServletResponse response) throws IOException {
-        userService.outputExcel(response);
+
+    @PostMapping("deleteUserByIds")
+    @ResponseBody
+    public String deleteUserByIds(@RequestParam(value = "ids[]") String[] ids){
+        for (int i=0;i<ids.length;i++){
+            System.out.println(ids[i]+",");
+        }
+        userService.deleteUserByIds(ids);
+        String successInfo="成功删除该部门";
+        return successInfo;
+    }
+
+    @PostMapping("getUserById")
+    @ResponseBody
+    public User getUserById(String empId){
+        User user=null;
+        if (empId!=null){
+            user = userService.getUserById(empId);
+        }
+        return user;
+    }
+
+    @PostMapping("editUser")
+    @ResponseBody
+    public String editUser(@RequestBody User user){
+        if (user.getEmpId()!=null){
+            userService.editUser(user);
+        }
+        String successInfo="成功修改的部门ID："+user.getEmpId();
+        return successInfo;
+    }
+
+    @PostMapping("addUser")
+    @ResponseBody
+    public String addUser(@RequestBody User user){
+        if (user.getEmpId()!=null){
+            userService.addUser(user);
+        }
+        String successInfo="成功添加的部门ID："+user.getEmpId();
+        return successInfo;
     }
 }

@@ -10,6 +10,7 @@ public interface PostMapper {
     List<Post> viewPost();
     List<Post> viewPostByKeyword(String keyword);
     void deletePostById(String postId);
+    void deletePostByIds(String[] ids);
 
     Post getPostById(String postId);
     void editPost(Post post);

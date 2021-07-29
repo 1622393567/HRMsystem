@@ -27,6 +27,12 @@
     <delete id="deleteDepartmentById" parameterType="string">
         delete from department_table where dept_id=#{dept_id}
     </delete>
+    <delete id="deleteDepartmentByIds" parameterType="string">
+        delete from department_table where dept_id in
+        <foreach item="ids" collection="array" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
 
 
     <select id="getDepartmentById" parameterType="string" resultMap="departmentMap">

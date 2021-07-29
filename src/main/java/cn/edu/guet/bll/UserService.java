@@ -12,4 +12,11 @@ public interface UserService {
     List<User> viewUserByKeyword(String keyword);
     void deleteUserById(String empId);
     void outputExcel(HttpServletResponse response) throws IOException;
+
+    void deleteUserByIds(String[] ids);
+
+    User getUserById(String deptId);
+
+    void editUser(User user);
+    void addUser(User user);
 }

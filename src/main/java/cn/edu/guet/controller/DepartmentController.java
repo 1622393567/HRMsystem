@@ -59,12 +59,25 @@ public class DepartmentController {
         return successInfo;
     }
 
+    @PostMapping("deleteDepartmentByIds")
+    @ResponseBody
+    public String deleteDepartmentByIds(@RequestParam(value = "ids[]") String[] ids){
+        for (int i=0;i<ids.length;i++){
+            System.out.println(ids[i]+",");
+        }
+        departmentService.deleteDepartmentByIds(ids);
+        String successInfo="成功删除的部门ID：";
+        return successInfo;
+    }
+
     @PostMapping("getDepartmentById")
     @ResponseBody
     public Department getDepartmentById(String deptId){
         Department department=null;
         if (deptId!=null){
             department = departmentService.getDepartmentById(deptId);
+            String tmp=department.getDeptFoundingTime().replace(" ","T");
+            department.setDeptFoundingTime(tmp);
         }
         return department;
     }

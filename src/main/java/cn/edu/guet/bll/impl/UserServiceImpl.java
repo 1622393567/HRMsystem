@@ -51,4 +51,26 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public void deleteUserByIds(String[] ids) {
+        userMapper.deleteUserByIds(ids);
+    }
+
+    @Override
+    public User getUserById(String empId) {
+        return userMapper.getUserById(empId);
+    }
+
+    @Override
+    public void editUser(User user) {
+        userMapper.editUser(user);
+    }
+
+
+    @Override
+    public void addUser(User user) {
+        userMapper.addUser(user);
+    }
+
+
 }

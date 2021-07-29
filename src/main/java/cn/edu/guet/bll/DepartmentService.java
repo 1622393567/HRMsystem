@@ -11,6 +11,9 @@ public interface DepartmentService {
     void outputExcel(HttpServletResponse response) throws IOException;
     List<Department> viewDepartmentByKeyword(String keyword);
     void deleteDepartmentById(String deptId);
+
+    void deleteDepartmentByIds(String[] ids);
+
     Department getDepartmentById(String deptId);
 
     void editDepartment(Department department);

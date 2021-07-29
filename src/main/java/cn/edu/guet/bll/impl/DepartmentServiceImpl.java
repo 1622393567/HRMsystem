@@ -28,14 +28,14 @@ public class DepartmentServiceImpl implements DepartmentService {
         String[] headers = {"部门ID","部门名称","部门主管","部门简介","成立时间"};
         List<Department> departments = departmentMapper.viewDepartment();
         List<List<String>> data = new ArrayList();
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
         for (Department d : departments) {
             List<String> row = new ArrayList<>();
             row.add(d.getDeptId());
             row.add(d.getDeptName());
             row.add(d.getDeptBossId());
             row.add(d.getDeptInfo());
-            row.add(simpleDateFormat.format(d.getDeptFoundingTime()));
+            String tmp=d.getDeptFoundingTime().replace("T"," ");
+            row.add(tmp);
             data.add(row);
         }
         ExcelUtil.exportExcel(response, sheetName, headers, data);
@@ -49,6 +49,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void deleteDepartmentById(String deptId) {
         departmentMapper.deleteDepartmentById(deptId);
+    }
+
+    @Override
+    public void deleteDepartmentByIds(String[] ids) {
+        departmentMapper.deleteDepartmentByIds(ids);
     }
 
     @Override

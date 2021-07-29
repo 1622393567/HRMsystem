@@ -25,6 +25,12 @@
     <delete id="deletePostById" parameterType="string">
         delete from post_table where post_id=#{post_id}
     </delete>
+    <delete id="deletePostByIds" parameterType="string">
+        delete from post_table where post_id in
+        <foreach item="ids" collection="array" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
 
     <select id="getPostById" parameterType="string" resultMap="postMap">
         select post_table.post_id,post_table.post_name,post_table.post_level,post_table.post_resp from post_table where post_id=#{post_id}
